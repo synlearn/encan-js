@@ -8,13 +8,41 @@ let isNestedObject = (x) => (typeof x === 'object' || Array.isArray(x) && x !== 
 
 const DataStore = {
     delimiter: '__',
-    getUserDeviceInfo() {
-        let _navigator = {};
+    getPageViewInfo() {
+        return {
+            ...this.getDocumentInfo(),
+            'type': CONSTANTS.PAGE_VIEW_EVENT,
+            'm': UUID.getMachineId(),
+            'v': UUID.getVisitorId(),
+            't': new Date().getTime(),
+            'e':'view'
+
+        };
+    },
+    getDocumentInfo: function () {
+        let copyKeyDocument = ['location', 'title', 'URL']; //'activeElement',
         let _document = {};
+        for (let i in window.document) {
+            if (copyKeyDocument.indexOf(i) !== -1 && window.document[i]) {
+                _document[i] = window.document[i];
+
+                if (isNestedObject(window.document[i])) {
+                    {
+                        _document[i] = {};
+                        for (let j in window.document[i]) {
+                            if (!isNestedObject(window.document[i][j]))
+                                _document[i][j] = window.document[i][j];
+                        }
+                    }
+                }
+            }
+        }
+        return _document;
+    }, getUserDeviceInfo() {
+        let _navigator = {};
         let copyKeyNavigator = ["vendorSub", "productSub", "vendor", "doNotTrack",
             "cookieEnabled", "appCodeName", "appName", "appVersion", "platform",
             "product", "userAgent", "deviceMemory", "userAgentData", "mobile"];
-        let copyKeyDocument = ['location', 'title', 'URL']; //'activeElement',
 
         for (let i in window.navigator) {
             if (copyKeyNavigator.indexOf(i) !== -1 && navigator[i]) {
@@ -36,31 +64,17 @@ const DataStore = {
                 effectiveType: navigator["connection"]["effectiveType"],
             }
         }
-
-
-        for (let i in window.document) {
-            if (copyKeyDocument.indexOf(i) !== -1 && window.document[i]) {
-                _document[i] = window.document[i];
-
-                if (isNestedObject(window.document[i])) {
-                    {
-                        _document[i] = {};
-                        for (let j in window.document[i]) {
-                            if (!isNestedObject(window.document[i][j]))
-                                _document[i][j] = window.document[i][j];
-                        }
-                    }
-                }
-            }
-        }
+        let _document = this.getDocumentInfo();
         let _register_data = {
             ..._navigator,
             ..._document,
             'type': CONSTANTS.REGISTER_EVENT,
-            'm': UUID.getMachineId()
+            'm': UUID.getMachineId(),
+            't': new Date().getTime(),
+            'e':'first_view'
         };
-        _register_data = DataStore.flat(_register_data);
-        _register_data = JSON.parse(JSON.stringify(_register_data));
+        //_register_data = DataStore.flat(_register_data);
+        // _register_data = JSON.parse(JSON.stringify(_register_data));
         __LOCAL__ && Logger.log("_register_data", _register_data);
         return _register_data;
     }, flat: function (xdata) {

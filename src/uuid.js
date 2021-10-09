@@ -20,7 +20,7 @@ let oneHourMilli = 3600000;
 let cookieKey = Config.userConfig.cookie_key;
 let cookieMachineIdentifierKey = cookieKey + "3m";
 let cookieVisitIdentifierKey = cookieKey + "2v";
-let isLocalModeisLocalMode = __LOCAL__;
+let isLocalMode = __LOCAL__;
 
 const machine_cookie_ttl = 365;
 const visitor_cookie_ttl = new Date(new Date().setHours(24, 0, 0, 0));
@@ -107,7 +107,9 @@ const UUID = {
     getMachineInfo: () => machine_value,
     getMachineId: () => machine_value.uid,
     getVisitorId: () => visit_value.uid,
-    isRegistered: () => visit_value.server_registered,
-    setRegisterId: registerServerId,
+    isServerRegistered: () => machine_value.server_registered,
+    setServerRegisterId: registerServerId,
+    isPageViewRegistered: () => window.encan_visit_registered && window.encan_visit_registered === 1,
+    setPageViewRegistered: (is) => window.encan_visit_registered = is,
 };
 export default UUID

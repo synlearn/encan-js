@@ -8,11 +8,12 @@ const Config = {
         return !re.test(userAgent);
 
     },
-    registered: false,
     userConfig: {
         track_all: false,
         click_track_class: 'encan-track',
-        process_timer: 1000,
+        track_action: 'encan-action',
+        track_action_parameters: 'encan-action-attr-',
+        process_timer: 10000,
         server: '',
         event_url: '',
         cookie_key: 'encan_u'

@@ -1,12 +1,16 @@
 import Logger from "./logger";
+import DataStore from "./dataStore";
 
 const axios = require('axios');
 
 const HttpAction = {
-    post: function (server_url, data) {
-
+    post: function (server_url, data, flat = true) {
+        const _data = data;
+        if (flat)
+            data = DataStore.flat(data);
+        data = btoa(JSON.stringify(data));
         return new Promise((resolve, reject) => {
-            __LOCAL__ && Logger.log('Http Action ', "POST", "server_url " + server_url, data);
+            __LOCAL__ && Logger.log('Http Action ', "POST", "server_url " + server_url, _data);
             if (!server_url || server_url.length < 5) {
                 __LOCAL__ && Logger.log('server_url config attribute Required');
                 reject('server_url config attribute Required');

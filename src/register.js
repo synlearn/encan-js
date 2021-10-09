@@ -5,24 +5,37 @@ import Job from "./job";
 import HttpAction from "./httpAction";
 import UUID from "./uuid";
 import DataStore from "./dataStore";
+import CONSTANTS from "./constants";
 
 
 const Register = {
-    registerServer: function (_register_data) {
-        __LOCAL__ && Logger.log("registerServer ");
+    registerServer: function () {
+        let _register_data = DataStore.getUserDeviceInfo();
+        __LOCAL__ && Logger.log("registerServer ", _register_data);
         const server_url = Config.userConfig['server'];
-        return HttpAction.post(server_url, _register_data)
+        return HttpAction.post(server_url + CONSTANTS.API.REGISTER, _register_data).then(function (registered) {
+            UUID.setServerRegisterId(registered);
+        }).catch(function () {
+            Job.submitRegisterJob(0, Register.registerServer);
+        });
     },
-
-    enqueueRegisterJob: function () {
-        return Job.submitRegisterJob(Register.registerServer);
+    registerPageView: function () {
+        let v_register_data = DataStore.getPageViewInfo();
+        __LOCAL__ && Logger.log("register page view", v_register_data);
+        const server_url = Config.userConfig['server'];
+        HttpAction.post(server_url + CONSTANTS.API.PAGE_VIEW, v_register_data).then(function (registered) {
+            UUID.setPageViewRegistered(registered);
+        }).catch(function () {
+            Job.submitRegisterJob(1, Register.registerPageView);
+        });
     },
     register: function (config) {
         Config.userConfig = {...Config.userConfig, ...config};
         __LOCAL__ && Logger.log("Register Called ", Config.userConfig);
 
-
-        let _register_data = DataStore.getUserDeviceInfo();
+        if (Config.isRealUserAgent && UUID.isServerRegistered() && !UUID.isPageViewRegistered()) {
+            Register.registerPageView();
+        }
 
         let _existingMapper = (document.onclick);
         document.onclick = function (event) {
@@ -36,16 +49,17 @@ const Register = {
                 __LOCAL__ && Logger.log("Bot Agent Skip");
                 return;
             }
-            if (UUID.isNewCustomer() || !UUID.isRegistered()) {
-                if (!Config.registered) {
-                    Register.registerServer(_register_data).then(function (registered) {
-                        UUID.setRegisterId(registered);
-                        Config.registered = registered;
-                    }).catch(function () {
-                        Register.enqueueRegisterJob();
-                    });
+            if (UUID.isNewCustomer() || !UUID.isServerRegistered()) {
+                __LOCAL__ && Logger.log("Bot Agent Skip");
+
+                if (!UUID.isServerRegistered()) {
+                    Register.registerServer();
+                    Register.registerPageView();
+
                 }
             }
+
+
             // Compensate for IE<9's non-standard event model
             if (event === undefined) event = window.event;
             let target = 'target' in event ? event.target : event.srcElement;

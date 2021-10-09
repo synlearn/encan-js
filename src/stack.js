@@ -30,6 +30,13 @@ class Stack {
         temp.push(element);
     }
 
+    //other methods go here
+    //Push an item in the Stack
+    pushTop(element) {
+        let temp = this.internalStack.get(this);
+        temp.unshift(element);
+    }
+
     //Peek top item from the Stack
     peek() {
         let temp = this.internalStack.get(this);
