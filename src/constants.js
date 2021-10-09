@@ -1,0 +1,6 @@
+const CONSTANTS = {
+    MACHINE_UID_PREFIX: 'M',
+    VISITOR_UID_PREFIX: 'V',
+    REGISTER_EVENT: 'R',
+};
+export default CONSTANTS

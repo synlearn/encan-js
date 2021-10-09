@@ -13,21 +13,21 @@ const Job = {
     },
     process: function () {
         setTimeout(function () {
-            Logger.log("Calling Process");
+            __LOCAL__&&Logger.log("Calling Process");
 
             if (!Config.registered) {
                 if (registerJob) {
-                    Logger.log("Processing call Register Task");
-                    registerJob().then(() => Logger.log("Register Success"))
-                        .catch(reason => Logger.log("Register Failed"));
+                    __LOCAL__&&Logger.log("Processing call Register Task");
+                    registerJob().then(() => __LOCAL__&&Logger.log("Register Success"))
+                        .catch(reason => __LOCAL__&&Logger.log("Register Failed"));
                 }
 
-                Logger.log("Server Not Registered , skip processing");
+                __LOCAL__&&Logger.log("Server Not Registered , skip processing");
                 return;
             }
 
             if (Stack.isEmpty()) {
-                Logger.log("Calling Process : Stack is empty");
+                __LOCAL__&&Logger.log("Calling Process : Stack is empty");
                 return;
             }
             const task = Stack.pop();
