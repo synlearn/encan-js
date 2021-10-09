@@ -1,9 +1,6 @@
 const Logger = {
-    isLocalMode: function () {
-        return process.env.NODE_ENV !== 'production';
-    },
-    log:function(){
-        if (Logger.isLocalMode())
+    log: function () {
+        if (__LOCAL__)
             console.log(...arguments);
     }
 };

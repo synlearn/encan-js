@@ -1,10 +1,4 @@
-import Logger from "./logger";
-
 const Config = {
-    isLocal:0,
-    isLocalMode: function () {
-        return process.env.NODE_ENV !== 'production';
-    },
     isRealUserAgent: function () {
         const isBotA = /bot|googlebot|crawler|spider|robot|crawling/i.test(navigator.userAgent);
         if (isBotA) return false;
@@ -18,10 +12,10 @@ const Config = {
     userConfig: {
         track_all: false,
         click_track_class: 'encan-track',
-        process_timer:1000,
-        server:'',
-        event_url:'',
-        cookie_key:'encan_u'
+        process_timer: 1000,
+        server: '',
+        event_url: '',
+        cookie_key: 'encan_u'
     },
 };
 export default Config

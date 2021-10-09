@@ -9,25 +9,25 @@ const Job = {
         Stack.push(fnTask);
     },
     submitRegisterJob: function (fnTask) {
-        registerJob =  fnTask ;
+        registerJob = fnTask;
     },
     process: function () {
         setTimeout(function () {
-            __LOCAL__&&Logger.log("Calling Process");
+            __LOCAL__ && Logger.log("Calling Process");
 
             if (!Config.registered) {
                 if (registerJob) {
-                    __LOCAL__&&Logger.log("Processing call Register Task");
-                    registerJob().then(() => __LOCAL__&&Logger.log("Register Success"))
-                        .catch(reason => __LOCAL__&&Logger.log("Register Failed"));
+                    __LOCAL__ && Logger.log("Processing call Register Task");
+                    registerJob().then(() => __LOCAL__ && Logger.log("Register Success"))
+                        .catch(reason => __LOCAL__ && Logger.log("Register Failed"));
                 }
 
-                __LOCAL__&&Logger.log("Server Not Registered , skip processing");
+                __LOCAL__ && Logger.log("Server Not Registered , skip processing");
                 return;
             }
 
             if (Stack.isEmpty()) {
-                __LOCAL__&&Logger.log("Calling Process : Stack is empty");
+                __LOCAL__ && Logger.log("Calling Process : Stack is empty");
                 return;
             }
             const task = Stack.pop();

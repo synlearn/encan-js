@@ -1,7 +1,6 @@
 import Logger from "./logger";
 import UUID from "./uuid";
 import CONSTANTS from "./constants";
-import Config from "./config";
 
 let flatten = require('flat');
 
@@ -62,7 +61,7 @@ const DataStore = {
         };
         _register_data = DataStore.flat(_register_data);
         _register_data = JSON.parse(JSON.stringify(_register_data));
-       __LOCAL__&&Logger.log("_register_data", _register_data);
+        __LOCAL__ && Logger.log("_register_data", _register_data);
         return _register_data;
     }, flat: function (xdata) {
         let data = flatten(xdata, {

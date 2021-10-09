@@ -42,5 +42,6 @@ class Stack {
         return temp.length;
     }
 }
-const  stack=new Stack();
+
+const stack = new Stack();
 exports.Stack = stack;

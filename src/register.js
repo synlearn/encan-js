@@ -9,7 +9,7 @@ import DataStore from "./dataStore";
 
 const Register = {
     registerServer: function (_register_data) {
-        __LOCAL__&&Logger.log("registerServer ");
+        __LOCAL__ && Logger.log("registerServer ");
         const server_url = Config.userConfig['server'];
         return HttpAction.post(server_url, _register_data)
     },
@@ -19,7 +19,7 @@ const Register = {
     },
     register: function (config) {
         Config.userConfig = {...Config.userConfig, ...config};
-        __LOCAL__&&Logger.log("Register Called ", Config.userConfig);
+        __LOCAL__ && Logger.log("Register Called ", Config.userConfig);
 
 
         let _register_data = DataStore.getUserDeviceInfo();
@@ -32,9 +32,8 @@ const Register = {
 
             //only register if user performs any action
             //skip any bot actions
-            if (!Config.isRealUserAgent)
-            {
-                __LOCAL__&&Logger.log("Bot Agent Skip");
+            if (!Config.isRealUserAgent) {
+                __LOCAL__ && Logger.log("Bot Agent Skip");
                 return;
             }
             if (UUID.isNewCustomer() || !UUID.isRegistered()) {
@@ -51,7 +50,7 @@ const Register = {
             if (event === undefined) event = window.event;
             let target = 'target' in event ? event.target : event.srcElement;
             if (target && (Config.userConfig['track_all'] || (target.classList && target.classList.contains(Config.userConfig.click_track_class)))) {
-                __LOCAL__&&Logger.log('clicked on ' + target.tagName, target);
+                __LOCAL__ && Logger.log('clicked on ' + target.tagName, target);
                 GlobalEvent.fireEvent('click', target)
             }
         };

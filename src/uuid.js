@@ -5,7 +5,7 @@ import {v4 as uuidv4} from 'uuid';
 import Logger from "./logger";
 import CONSTANTS from "./constants";
 
-__LOCAL__&&Logger.log("Initializing UUID Module");
+__LOCAL__ && Logger.log("Initializing UUID Module");
 
 
 let now = new Date().getTime();
@@ -14,13 +14,13 @@ todayStartDate.setHours(0, 0, 0, 0);
 let todayStart = todayStartDate.getTime();
 //let previousHourDate=new Date();
 //previousHourDate.setHours(previousHourDate.getHours()+1);
-let getVisitorId = () =>  CONSTANTS.VISITOR_UID_PREFIX + uuidv4();
-let getMachineId = () => CONSTANTS.MACHINE_UID_PREFIX+ uuidv4();
+let getVisitorId = () => CONSTANTS.VISITOR_UID_PREFIX + uuidv4();
+let getMachineId = () => CONSTANTS.MACHINE_UID_PREFIX + uuidv4();
 let oneHourMilli = 3600000;
 let cookieKey = Config.userConfig.cookie_key;
 let cookieMachineIdentifierKey = cookieKey + "3m";
 let cookieVisitIdentifierKey = cookieKey + "2v";
-let isLocalMode = Config.isLocalMode();
+let isLocalModeisLocalMode = __LOCAL__;
 
 const machine_cookie_ttl = 365;
 const visitor_cookie_ttl = new Date(new Date().setHours(24, 0, 0, 0));
@@ -28,12 +28,12 @@ const visit = {
     version: 0.10,
     first_visit: now,
     recent_visit: now,
-    server_registered:false,
+    server_registered: false,
     total_visit: 0,
     updated: 0,
 };
 
-__LOCAL__&&Logger.log("Initializing Cookie Module");
+__LOCAL__ && Logger.log("Initializing Cookie Module");
 
 const cookies = Cookies.withConverter({
     read: function (value, name) {
@@ -48,7 +48,7 @@ const cookies = Cookies.withConverter({
     }
 });
 
-__LOCAL__&&Logger.log("Initializing Machine Cookie");
+__LOCAL__ && Logger.log("Initializing Machine Cookie");
 
 
 //initialize & save machine id
@@ -58,19 +58,19 @@ let machine_value = (machine === undefined) ? {...visit} : machine;
 
 //assign
 if (machine_value.updated !== todayStart) {
-    __LOCAL__&&Logger.log("Updating Machine Cookie");
+    __LOCAL__ && Logger.log("Updating Machine Cookie");
     machine_value.total_visit += 1;
     machine_value['uid'] = machine_id;
     machine_value.recent_visit = now;
-    machine_value.updated = todayStart
+    machine_value.updated = todayStart;
     let cookieOptions = {expires: machine_cookie_ttl};
     if (!isLocalMode) cookieOptions['secure'] = true;
     cookies.set(cookieMachineIdentifierKey, machine_value, cookieOptions);
-    __LOCAL__&&Logger.log("Updating Visitor Cookie", machine_value);
+    __LOCAL__ && Logger.log("Updating Visitor Cookie", machine_value);
 
 }
 
-__LOCAL__&&Logger.log("Initializing Visitor Cookie");
+__LOCAL__ && Logger.log("Initializing Visitor Cookie");
 
 //initialize & save visitor id
 let visitor = cookies.get(cookieVisitIdentifierKey);
@@ -78,7 +78,7 @@ let visitor_id = (visitor === undefined) ? getVisitorId() : visitor['uid'];
 let visit_value = (visitor === undefined) ? {...visit} : visitor;
 
 if ((now - visit_value.updated >= oneHourMilli) || now - visit_value.updated === 0) {
-    __LOCAL__&&Logger.log("Updating Visitor Cookie");
+    __LOCAL__ && Logger.log("Updating Visitor Cookie");
     //assign
     visit_value['uid'] = visitor_id;
     visit_value.recent_visit = now;
@@ -87,7 +87,7 @@ if ((now - visit_value.updated >= oneHourMilli) || now - visit_value.updated ===
     let cookieOptions = {expires: visitor_cookie_ttl};
     if (!isLocalMode) cookieOptions['secure'] = true;
     cookies.set(cookieVisitIdentifierKey, visit_value, cookieOptions);
-    __LOCAL__&&Logger.log("Updating Visitor Cookie", visit_value);
+    __LOCAL__ && Logger.log("Updating Visitor Cookie", visit_value);
 
 }
 
