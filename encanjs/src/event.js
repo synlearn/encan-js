@@ -20,7 +20,7 @@ const Event = {
         argz = DataStore.flat(argz);
         Event.eventQueue.push(argz);
         if (Event.eventQueue.length === 1) {
-            __LOCAL__ && Logger.log('Event Queued');
+            __LOCAL__ && Logger.log('Event Queued ');
             Job.submit(function () {
                 const queue = Event.eventQueue;
                 Event.eventQueue = [];
@@ -32,7 +32,7 @@ const Event = {
                 return Promise.all([HttpAction.post(server_url, queue, false), completeJob]);
             });
         } else {
-            __LOCAL__ && Logger.log('Event Already Queued');
+            __LOCAL__ && Logger.log('Event Already Queued QueueSize::' + Event.eventQueue.length);
         }
     },
     push: function (event_name, args) {

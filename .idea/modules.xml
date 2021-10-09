@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/../encan-html/.idea/encan-html.iml" filepath="$PROJECT_DIR$/../encan-html/.idea/encan-html.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/encanjs.iml" filepath="$PROJECT_DIR$/.idea/encanjs.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/encan.iml" filepath="$PROJECT_DIR$/.idea/encan.iml" />
     </modules>
   </component>
 </project>

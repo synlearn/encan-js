@@ -8,7 +8,8 @@ const HttpAction = {
         const _data = data;
         if (flat)
             data = DataStore.flat(data);
-        data = btoa(JSON.stringify(data));
+        //data = JSON.stringify(data);
+        //data = btoa(data);
         return new Promise((resolve, reject) => {
             __LOCAL__ && Logger.log('Http Action ', "POST", "server_url " + server_url, _data);
             if (!server_url || server_url.length < 5) {
