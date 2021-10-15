@@ -9,16 +9,31 @@ let isNestedObject = (x) => (typeof x === 'object' || Array.isArray(x) && x !== 
 const DataStore = {
     keyMap:   new Object({'brands':'ba','location':'lc','document':'wv','useragentdata':'uax','useragent':'ua'}),
     delimiter: '__',
-    getPageViewInfo() {
+    getTripInfo() {
+        return {
+            'type': CONSTANTS.TRIP_EVENT,
+            'm': UUID.getMachineId(),
+            'v': UUID.getVisitorId(),
+            't': new Date().getTime(),
+            'e': 'trip',
+            'vc': UUID.totalDailyVisit(),
+            'tvc': UUID.totalVisit(),
+            'name':'Trip'
+        };
+    }, getPageViewInfo() {
         return {
             ...this.getDocumentInfo(),
             'type': CONSTANTS.PAGE_VIEW_EVENT,
             'm': UUID.getMachineId(),
             'v': UUID.getVisitorId(),
-            't': new Date().getTime(),
-            'e': 'view',
-            'vc': UUID.totalDailyVisit(),
-            'tvc': UUID.totalVisit(),
+            't': new Date().getTime()
+        };
+    }, getUUIdInfo() {
+        return {
+             'type': CONSTANTS.PAGE_USER_INFO,
+            'm': UUID.getMachineId(),
+            'v': UUID.getVisitorId(),
+            't': new Date().getTime()
         };
     },
     mapKey:function(key){
@@ -80,7 +95,9 @@ const DataStore = {
             'type': CONSTANTS.REGISTER_EVENT,
             'm': UUID.getMachineId(),
             't': new Date().getTime(),
-            'e': 'first_view'
+            'e': 'first_view',
+            'name':'Mac'
+
         };
         //_register_data = DataStore.flat(_register_data);
         // _register_data = JSON.parse(JSON.stringify(_register_data));

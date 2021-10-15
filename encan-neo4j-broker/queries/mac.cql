@@ -1,0 +1,4 @@
+CREATE CONSTRAINT unique_machine ON (X:Machine) ASSERT X.m IS UNIQUE
+CREATE CONSTRAINT unique_session ON (X:Session) ASSERT X.v IS UNIQUE
+CREATE CONSTRAINT unique_pgv ON (X:PGView) ASSERT X.v_id IS UNIQUE
+

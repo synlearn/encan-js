@@ -21,7 +21,7 @@ const HttpAction = {
                 .then(function (response) {
                     if (response['status'] === 200) {
                         __LOCAL__ && Logger.log('Http Action Success');
-                        resolve(true);
+                        resolve(response.data);
                     } else {
                         __LOCAL__ && Logger.log('Http Action Failed');
                         reject('Server Returned ' + response['status']);

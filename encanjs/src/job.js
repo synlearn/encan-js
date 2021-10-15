@@ -5,6 +5,7 @@ import UUID from "./uuid";
 
 const Stack = require("./stack").Stack;
 let registerJob = {};
+const MAX_JOBS = 3;
 
 window.addEventListener('beforeunload', function (event) {
     __LOCAL__ && Logger.log(`Submit Job beforeunload`);
@@ -29,12 +30,20 @@ const Job = {
     _processAllJobs: function () {
         let rJobLength = Object.keys(registerJob).length;
         if (!UUID.isServerRegistered() || rJobLength > 0) {
-            for (let i = 0; i < rJobLength; i++) {
+            for (let i = 0; i < MAX_JOBS; i++) {
                 __LOCAL__ && Logger.log("Processing call Register Task " + i);
-                rJobLength[i].then(() => {
-                    delete registerJob[i];
-                    __LOCAL__ && Logger.log(`Register Success , removing job ${i}`)
-                }).catch(reason => __LOCAL__ && Logger.log("Register Failed"));
+
+                if (!UUID.isServerRegistered() && i>0) {
+                    __LOCAL__ && Logger.log("Server Not Registered , skip page visit");
+                    return;
+                }
+
+                if (registerJob[i]) {
+                    (registerJob[i]()).then(() => {
+                        delete registerJob[i];
+                        __LOCAL__ && Logger.log(`Register Success , removing job ${i}`)
+                    }).catch(reason => __LOCAL__ && Logger.log("Register Failed"));
+                }
             }
             __LOCAL__ && Logger.log("Server Not Registered , skip processing");
             return;

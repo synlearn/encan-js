@@ -3,11 +3,14 @@ const CONSTANTS = {
     VISITOR_UID_PREFIX: 'V',
     REGISTER_EVENT: 'R',
     PAGE_VIEW_EVENT: 'V',
+    PAGE_USER_INFO: 'U',
+    TRIP_EVENT: 'N',
     GENERAL_EVENT: 'E',
-    API:{
-        EVENT:'/encan/api/register.json?type=event',
-        REGISTER:'/encan/api/register.json',
-        PAGE_VIEW:'/encan/api/register.json?type=page_view'
+    API: {
+        EVENT: '/api/v1/encan/registerEvent',
+        REGISTER: '/api/v1/encan/registerMachine',
+        REGISTER_UUID: '/api/v1/encan/registerUid',
+        PAGE_VIEW: '/api/v1/encan/registerTripx'
     }
 };
 export default CONSTANTS

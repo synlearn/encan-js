@@ -13,33 +13,61 @@ const Register = {
         let _register_data = DataStore.getUserDeviceInfo();
         __LOCAL__ && Logger.log("registerServer ", _register_data);
         const server_url = Config.userConfig['server'];
-        return HttpAction.post(server_url + CONSTANTS.API.REGISTER, _register_data).then(function (registered) {
-            UUID.setServerRegisterId(registered);
-        }).catch(function () {
-            Job.submitRegisterJob(0, Register.registerServer);
-        });
+        try {
+            return HttpAction.post(server_url + CONSTANTS.API.REGISTER, _register_data).then(function (response) {
+                __LOCAL__ && Logger.log("registerServer response ", response);
+                UUID.setServerRegisterId(response.data.registered);
+            }).catch(function (e) {
+                __LOCAL__ && Logger.error("Error  ", e);
+                Job.submitRegisterJob(0, Register.registerServer);
+            });
+        } catch (e) {
+            console.error(e)
+        }
     },
-    registerPageView: function () {
-        let v_register_data = DataStore.getPageViewInfo();
+    registerUid: function (uid) {
+        let _register_data = DataStore.getUUIdInfo();
+        _register_data['u'] = uid;
+        __LOCAL__ && Logger.log("registerUid ", _register_data);
+        const server_url = Config.userConfig['server'];
+        try {
+
+            return HttpAction.post(server_url + CONSTANTS.API.REGISTER_UUID, _register_data).then(function (response) {
+                __LOCAL__ && Logger.log("registerUid response ", response);
+            }).catch(function (e) {
+                __LOCAL__ && Logger.error("Error  ", e);
+                Job.submitRegisterJob(2, Register.registerUid);
+            });
+        } catch (e) {
+            console.error(e)
+        }
+    },
+    registerTrip: function () {
+        let v_register_data = DataStore.getTripInfo();
         __LOCAL__ && Logger.log("register page view", v_register_data);
         const server_url = Config.userConfig['server'];
-        HttpAction.post(server_url + CONSTANTS.API.PAGE_VIEW, v_register_data).then(function (registered) {
-            UUID.setPageViewRegistered(registered);
-        }).catch(function () {
-            Job.submitRegisterJob(1, Register.registerPageView);
-        });
+        try {
+            return HttpAction.post(server_url + CONSTANTS.API.PAGE_VIEW, v_register_data).then(function (response) {
+                __LOCAL__ && Logger.log("registerPageView response ", response);
+                if (response && response.data)
+                    UUID.setTripRegistered(response.data.registered);
+            }).catch(function (e) {
+                __LOCAL__ && Logger.error("Error  ", e);
+                Job.submitRegisterJob(1, Register.registerTrip);
+            });
+        } catch (e) {
+            console.error(e)
+        }
     },
     register: function (config) {
         Config.userConfig = {...Config.userConfig, ...config};
         __LOCAL__ && Logger.log("Register Called ", Config.userConfig);
 
-        if (Config.isRealUserAgent && UUID.isServerRegistered() && !UUID.isPageViewRegistered()) {
-            Register.registerPageView();
-        }
 
         let _existingMapper = (document.onclick);
         document.onclick = function (event) {
             //call already allocated method if any
+
             if (_existingMapper)
                 _existingMapper.call(this);
 
@@ -54,9 +82,13 @@ const Register = {
 
                 if (!UUID.isServerRegistered()) {
                     Register.registerServer();
-                    Register.registerPageView();
+                    Register.registerTrip();
 
                 }
+            }
+            if (!UUID.isPageViewRegistered()) {
+                UUID.setPageViewRegistered(true);
+                GlobalEvent.pageView(document.location)
             }
 
 
@@ -70,4 +102,9 @@ const Register = {
         };
     }
 };
-export default Register.register
+
+const exporter = {
+    create: Register.register,
+    uid: Register.registerUid,
+};
+export default exporter;

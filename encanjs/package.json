@@ -26,6 +26,7 @@
   },
   "dependencies": {
     "axios": "^0.22.0",
+    "dotenv": "^10.0.0",
     "flat": "^5.0.2",
     "js-cookie": "^3.0.1",
     "uuid": "^8.3.2"

@@ -24,13 +24,20 @@
   <button class="btn encan-track" encan-action="add_to_cart" encan-action-attr-1="21" encan-action-attr-2="12" >Hello world! This is HTML5 Boilerplate.</button>
   <a href="?y=ii" class="btn encan-track" encan-action="next_page" encan-action-attr-1="21" encan-action-attr-2="12" >Hello world! This is HTML5 Boilerplate.</a>
 
+  <button class="btn encan-track" encan-action="search"  encan-action-attr-id="search" encan-action-attr-1="Apple" encan-action-attr-2="Orange" >Hello world! This is HTML5 Boilerplate.</button>
+  <button class="btn encan-track" encan-action="terminate"  encan-action-attr-id="terminate" encan-action-attr-1="Unique" encan-action-attr-2="Unique" > Ter Unique.</button>
+  <button  onclick="setUid()">User</button>
+
 <script src="/encan/encanjs/dist/main.bundle.js"></script>
 <script>
-  encan.Register({
-    server:'http://localhost:63343',
-    event_url:'http://localhost:63343',
+  encan.Register.create({
+    server:'http://localhost:3000',
   });
- </script>
+  function setUid() {
+    encan.Register.uid(123);
+  }
+
+</script>
 
 
 </body>

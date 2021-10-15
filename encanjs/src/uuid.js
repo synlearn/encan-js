@@ -98,6 +98,13 @@ function registerServerId(registered) {
     cookies.set(cookieMachineIdentifierKey, machine_value, cookieOptions);
 }
 
+function registerTripId(registered) {
+    let cookieOptions = {expires: visitor_cookie_ttl};
+    if (!isLocalMode) cookieOptions['secure'] = true;
+    visit_value.server_registered = registered;
+    cookies.set(cookieVisitIdentifierKey, visit_value, cookieOptions);
+}
+
 const UUID = {
     totalVisit: () => machine_value.total_visit,
     totalDailyVisit: () => visit_value.total_visit,
@@ -109,7 +116,12 @@ const UUID = {
     getVisitorId: () => visit_value.uid,
     isServerRegistered: () => machine_value.server_registered,
     setServerRegisterId: registerServerId,
-    isPageViewRegistered: () => window.encan_visit_registered && window.encan_visit_registered === 1,
-    setPageViewRegistered: (is) => window.encan_visit_registered = is,
+    isTripRegistered: () => visit_value.server_registered,
+    setTripRegistered: registerTripId,
+    setPageViewRegistered: (is) => window.encan_page_registered = is,
+    isPageViewRegistered: () => window.encan_page_registered && window.encan_page_registered === true,
+    getPageViewId: () => window.v_id ? window.v_id : (window.v_id = ("vx" + (new Date().getTime())))
+    //window.encan_visit_registered && window.encan_visit_registered === 1,
+    //
 };
 export default UUID
